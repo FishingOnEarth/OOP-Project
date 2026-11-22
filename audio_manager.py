@@ -3,6 +3,7 @@
 #raise error for frequency beyond range of human hearing
 import time
 from pyo import Server, Sine, SigTo
+import math
 
 class AudioManager:
     #volume 0.1 smoother during rapid pitch (frequency) sweeps
