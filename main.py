@@ -5,6 +5,7 @@ from wavefront import Wavefront
 from car import Car
 from audio_manager import AudioManager
 from doppler import Doppler
+from interface import *
 
 pygame.init()
 screen=pygame.display.set_mode(config.WINDOW_SIZE)
