@@ -31,22 +31,28 @@ def draw_background(screen):
 
 def draw_road(screen,start,end):
     '''Draws the road between the start and end points'''
+    start=to_pixels(start)
+    end=to_pixels(end)
     pygame.draw.line(screen,config.LINE_COLOR,start,end,config.LINE_WIDTH)
 
 def draw_car(screen,position,color):
     '''draws one car at its current position using its assigned color'''
     rect=pygame.Rect(0,0,config.CAR_WIDTH,config.CAR_HEIGHT)
+    position=to_pixels(position)
     rect.center = position
     pygame.draw.rect(screen,color,rect)
 
 
 def draw_wavefront(screen,center,radius):
     '''draws one circle using its fixed center and current radius'''
+    center=to_pixels(center)
+    radius=round(radius*config.PIXELS_PER_METRE)
     pygame.draw.circle(screen,config.LINE_COLOR,center,radius,config.LINE_WIDTH)
 
 def draw_velocity_arrow(screen, position,velocity,color):
     '''	Draws an arrow pointing in the car’s direction of motion. A longer arrow represents a higher speed.'''
     vx,vy=velocity
+    position=to_pixels(position)
     x,y=position
     #find where the arrow ends
     dx=vx*config.ARROW_SCALE
@@ -67,3 +73,10 @@ def draw_velocity_arrow(screen, position,velocity,color):
     points=[tip,(base_x+side_x,base_y+side_y), (base_x - side_x, base_y - side_y)]
     pygame.draw.line(screen, color, position,final_pos)
     pygame.draw.polygon(screen, color, points)
+
+def to_pixels(position):
+    x, y = position
+    return (
+        round(x * config.PIXELS_PER_METRE),
+        round(y * config.PIXELS_PER_METRE),
+    )

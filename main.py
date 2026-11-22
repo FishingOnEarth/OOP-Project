@@ -17,18 +17,24 @@ wavefronts=[]
 ui=Interface(panel_rect)
 f_obs=AudioManager()
 doppler=Doppler()
-source_position=(100,200)
+
+path_start = (10, 45)
+path_end = (70, 20)
+observer_start = (150, 60)
+observer_end = (10, 60)
+last_emission_time = 0
+
+source_car = Car(path_start, ui.source_speed, path_end)
+observer = Car(observer_start, ui.observer_speed, observer_end)
+
+car_speed=100
+
+source_position=(20,40)
 wave1=Wavefront(source_position,0)
 wavefronts.append(wave1)
-path_start=(50,225)
-path_end=(350,100)
-last_emission_time=0
-car_speed=100
-source_car=Car(path_start, car_speed,path_end )
-observer=Car((750,300),100,(50,300))
 
 
-#f_obs.start()
+
 
 running=True
 while running:
@@ -43,7 +49,7 @@ while running:
         ui.source_speed_slider.value = 50.0
         ui.observer_speed_slider.value = 0.0
         source_car=Car(path_start, car_speed,path_end )
-        observer=Car((750,300),100,(50,300))
+        observer=Car((150,60),100,(10,60))
         source_car.speed=ui.source_speed
         observer.speed=ui.observer_speed
         simulation_time=0
@@ -53,19 +59,19 @@ while running:
         ui.set_observed_frequency(ui.base_freq)
     
     if ui.running:
-        simulation_time+=dt
+        simulation_time+=dt*0.2
         source_car.speed=ui.source_speed
         observer.speed=ui.observer_speed
 
-        source_car.update(dt)
-        observer.update(dt)
+        source_car.update(dt*0.2)
+        observer.update(dt*0.2)
         fo=doppler.dopplermath(source_car, observer, ui.base_freq)
         ui.set_observed_frequency(fo)
 
         f_obs.set_frequency(fo)
         f_obs.start()
 
-        if simulation_time-last_emission_time>=0.2:
+        if simulation_time-last_emission_time>=0.04:
             wave=Wavefront(source_car.position,simulation_time)
             last_emission_time=simulation_time
             wavefronts.append(wave)
