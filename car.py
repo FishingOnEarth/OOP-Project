@@ -43,4 +43,3 @@ class Car:
         x, y = self.position
 
         self.position = (x + vx * dt, y + vy * dt)
-
