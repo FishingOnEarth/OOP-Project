@@ -1,5 +1,6 @@
 import pygame
 
+#can manually change here
 BACKGROUND_COLOR = (24, 27, 36)
 
 COLOR_PALETTE = {
