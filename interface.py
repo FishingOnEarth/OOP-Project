@@ -1,6 +1,6 @@
 import pygame
 
-#can manually change here
+#customize color
 BACKGROUND_COLOR = (24, 27, 36)
 
 COLOR_PALETTE = {
@@ -19,16 +19,17 @@ COLOR_PALETTE = {
     "readout_text": (110, 220, 175),
 }
 
+
 class Slider:
     def __init__(
         self,
-        label: str,
-        rect: pygame.Rect,
-        min_val: float,
-        max_val: float,
-        initial_val: float,
-        unit: str = "",
-        palette: dict[str, tuple[int, int, int]] | None = None
+        label,
+        rect,
+        min_val,
+        max_val,
+        initial_val,
+        unit="",
+        palette=None,
     ):
         self.label = label
         self.rect = rect
@@ -39,14 +40,14 @@ class Slider:
         self.dragging = False
         self.palette = palette if palette is not None else COLOR_PALETTE
 
-    def _set_from_x(self, x: int):
+    def _set_from_x(self, x):
         if self.rect.width <= 0:
             return
         ratio = (x - self.rect.x) / self.rect.width
         ratio = max(0.0, min(1.0, ratio))
         self.value = self.min_val + ratio * (self.max_val - self.min_val)
 
-    def handle_event(self, event: pygame.event.Event):
+    def handle_event(self, event):
         changed = False
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             hit_box = self.rect.inflate(0, 12)
@@ -63,7 +64,8 @@ class Slider:
                 changed = True
         return changed
 
-    def draw(self, screen: pygame.Surface, font: pygame.font.Font):
+    def draw(self, screen, font):
+        # Label + current numeric value
         text_surf = font.render(
             f"{self.label}: {self.value:.1f} {self.unit}".strip(),
             True,
@@ -71,10 +73,12 @@ class Slider:
         )
         screen.blit(text_surf, (self.rect.x, self.rect.y - 20))
 
+        # Track line
         pygame.draw.rect(
             screen, self.palette["slider_track"], self.rect, border_radius=4
         )
 
+        # Filled portion + knob
         span = self.max_val - self.min_val
         ratio = 0.0 if span == 0 else (self.value - self.min_val) / span
         knob_x = int(self.rect.x + ratio * self.rect.width)
@@ -90,12 +94,17 @@ class Slider:
 
 
 class Interface:
-    def __init__(self, panel_rect: pygame.Rect, base_freq: float = 440.0,
-                 bg_color: tuple[int, int,int] = BACKGROUND_COLOR, 
-                 palette: dict[str, tuple[int, int, int]]|None = None):
+    def __init__(
+        self,
+        panel_rect,
+        base_freq=440.0,
+        bg_color=BACKGROUND_COLOR,
+        palette=None,
+    ):
         self.panel_rect = panel_rect
         self.bg_color = bg_color
         self.palette = palette if palette is not None else COLOR_PALETTE
+
         self.font = pygame.font.SysFont("arial", 16)
         self.title_font = pygame.font.SysFont("arial", 18, bold=True)
 
@@ -110,30 +119,48 @@ class Interface:
         btn_h = 36
         bottom_margin = 16
 
-        # Buttons: Start/Pause and Reset
+        # Place Start/Pause and Reset buttons at the bottom of the panel/page
         btn_y = self.panel_rect.bottom - bottom_margin - btn_h
         self.start_pause_rect = pygame.Rect(x, btn_y, btn_w, btn_h)
         self.reset_rect = pygame.Rect(x + btn_w + 10, btn_y, btn_w, btn_h)
 
         # Sliders (speeds in m/s, base frequency in Hz)
-        # Keep max speed safely below speed of sound (343 m/s), e.g., 280 m/s
+        # Keep max speed safely below speed of sound (343 m/s)
         self.source_speed_slider = Slider(
-            "Source Speed", pygame.Rect(x, self.panel_rect.y + 85, w, 8), 
-            0.0, 280.0, 50.0, "m/s", palette=self.palette
+            "Source Speed",
+            pygame.Rect(x, self.panel_rect.y + 85, w, 8),
+            0.0,
+            280.0,
+            50.0,
+            "m/s",
+            palette=self.palette,
         )
         self.observer_speed_slider = Slider(
-            "Observer Speed", pygame.Rect(x, self.panel_rect.y + 195, w, 8), 
-            0.0, 280.0, 0.0, "m/s", palette=self.palette
+            "Observer Speed",
+            pygame.Rect(x, self.panel_rect.y + 145, w, 8),
+            0.0,
+            280.0,
+            0.0,
+            "m/s",
+            palette=self.palette,
         )
         self.base_freq_slider = Slider(
-            "Base Freq (f0)", pygame.Rect(x, self.panel_rect.y + 255, w, 8), 
-            100.0, 1200.0, base_freq, "Hz", palette=self.palette
+            "Base Freq (f0)",
+            pygame.Rect(x, self.panel_rect.y + 205, w, 8),
+            100.0,
+            1200.0,
+            base_freq,
+            "Hz",
+            palette=self.palette,
         )
         self.sliders = [
             self.source_speed_slider,
             self.observer_speed_slider,
             self.base_freq_slider,
         ]
+
+        # Readout box positioned above the bottom buttons
+        self.freq_box = pygame.Rect(x, btn_y - 58, w, 44)
 
     @property
     def source_speed(self):
@@ -147,10 +174,10 @@ class Interface:
     def base_freq(self):
         return self.base_freq_slider.value
 
-    def set_running(self, running: bool):
+    def set_running(self, running):
         self.running = bool(running)
 
-    def set_observed_frequency(self, freq: float):
+    def set_observed_frequency(self, freq):
         self.current_freq = float(freq)
 
     def consume_reset_request(self):
@@ -159,7 +186,7 @@ class Interface:
             return True
         return False
 
-    def handle_event(self, event: pygame.event.Event):
+    def handle_event(self, event):
         if event.type == pygame.QUIT:
             self.should_quit = True
             return
@@ -174,7 +201,7 @@ class Interface:
         for slider in self.sliders:
             slider.handle_event(event)
 
-    def draw(self, screen: pygame.Surface):
+    def draw(self, screen):
         # Panel background and left border
         pygame.draw.rect(screen, self.palette["panel_bg"], self.panel_rect)
         pygame.draw.line(
@@ -185,7 +212,7 @@ class Interface:
             2,
         )
 
-        # Main interface title (2d doppler)
+        # Main interface title
         title_surf = self.title_font.render(
             "2D doppler visualization", True, self.palette["title_text"]
         )
