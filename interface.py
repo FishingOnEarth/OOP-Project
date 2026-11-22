@@ -112,7 +112,7 @@ class Interface:
 
         # Buttons: Start/Pause and Reset
         btn_y = self.panel_rect.bottom - bottom_margin - btn_h
-        self.freq_box = pygame.Rect(x, btn_y - 58, w, 44)
+        self.start_pause_rect = pygame.Rect(x, btn_y, btn_w, btn_h)
         self.reset_rect = pygame.Rect(x + btn_w + 10, btn_y, btn_w, btn_h)
 
         # Sliders (speeds in m/s, base frequency in Hz)
