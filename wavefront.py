@@ -1,4 +1,4 @@
-class wavefront:
+class Wavefront:
     def __init__(self,source_position,emmited_at):
         '''Saves where and when the source emmitted the wavefront'''
         self.source_position=source_position
