@@ -6,15 +6,15 @@ def draw_rectangle(screen):
     pygame.draw.rect(screen, config.SOURCE_COLOR, (100, 100, 50, 50))
 
 
-def draw_scene(screen,path_start,path_end,source_position,source_velocity,observer_position,observer_velocity,wavefronts,simulation_time,sound_speed,pending_start=None,route_selected=None):
+def draw_scene(screen,path_start,path_end,source_position,source_velocity,observer_position,observer_velocity,wavefronts,simulation_time,sound_speed,source_image,observer_image,pending_start=None,route_selected=None):
     '''Draws one frame by calling the other drawing functions in order'''
     draw_background(screen)
     draw_road(screen,path_start,source_position)
     #drawing for source car and arrow
-    draw_car(screen,source_position,config.SOURCE_COLOR)
+    draw_car(screen,source_position,source_image)
     draw_velocity_arrow(screen, source_position,source_velocity,config.SOURCE_COLOR)
     #drawing for observer and arrow
-    draw_car(screen,observer_position,config.OBS_COLOR)
+    draw_car(screen,observer_position,observer_image)
     draw_velocity_arrow(screen, observer_position,observer_velocity,config.OBS_COLOR)
 
     for wave in wavefronts:
@@ -53,12 +53,16 @@ def draw_road(screen,start,end):
         dot_center=(xi+dot*20*ux,yi+dot*20*uy)
         pygame.draw.circle(screen,config.MARKER_COLOR,dot_center,3)
 
-def draw_car(screen,position,color):
+def draw_car(screen,position,image):
     '''draws one car at its current position using its assigned color'''
+    '''
     rect=pygame.Rect(0,0,config.CAR_WIDTH,config.CAR_HEIGHT)
     position=to_pixels(position)
     rect.center = position
     pygame.draw.rect(screen,color,rect)
+    '''
+    rect=image.get_rect(center=to_pixels(position))
+    screen.blit(image,rect)
 
 
 def draw_wavefront(screen,center,radius):

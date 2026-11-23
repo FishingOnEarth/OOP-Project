@@ -6,6 +6,7 @@ from car import Car
 from audio_manager import AudioManager
 from doppler import Doppler
 from interface import *
+from assets import load_image
 
 pygame.init()
 screen=pygame.display.set_mode(config.WINDOW_SIZE)
@@ -14,6 +15,9 @@ clock=pygame.time.Clock()
 simulation_time=0
 wavefronts=[]
 
+car_size = (config.CAR_WIDTH, config.CAR_HEIGHT)
+source_image = load_image("images/source.png", car_size)
+observer_image = load_image("images/obs.png", car_size)
 ui=Interface(panel_rect)
 f_obs=AudioManager()
 doppler=Doppler()
@@ -98,7 +102,9 @@ while running:
     else:
         f_obs.stop()
     
-    renderer.draw_scene(screen,path_start,path_end,source_car.position,source_car.velocity(),observer.position,observer.velocity(),wavefronts=wavefronts,simulation_time=simulation_time,sound_speed=config.SOUND_SPEED,pending_start=pending_start,route_selected=route_selected)
+    renderer.draw_scene(screen,path_start,path_end,source_car.position,source_car.velocity(),observer.position,observer.velocity(),wavefronts=wavefronts,simulation_time=simulation_time,sound_speed=config.SOUND_SPEED,source_image=source_image,observer_image=observer_image,pending_start=pending_start,route_selected=route_selected)
+    source_image=source_image
+    observer_image=observer_image
     ui.draw(screen)
     pygame.display.flip()
     

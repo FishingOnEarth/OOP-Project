@@ -1,4 +1,5 @@
 import pygame
+from assets import load_image
 
 #customize color
 BACKGROUND_COLOR = (24, 27, 36)
@@ -116,7 +117,7 @@ class Interface:
         x = self.panel_rect.x + 16
         w = self.panel_rect.width - 32
         btn_w = (w - 10) // 2
-        btn_h = 36
+        btn_h = 70
         bottom_margin = 16
 
         # Place Start/Pause and Reset buttons at the bottom of the panel/page
@@ -124,11 +125,18 @@ class Interface:
         self.start_pause_rect = pygame.Rect(x, btn_y, btn_w, btn_h)
         self.reset_rect = pygame.Rect(x + btn_w + 10, btn_y, btn_w, btn_h)
 
+        #load images for buttons and title
+        self.start_image = load_image("images/start.png", self.start_pause_rect.size)
+        self.pause_image = load_image("images/reset.png", self.start_pause_rect.size)
+        self.reset_image = load_image("images/reset.png", self.reset_rect.size)
+        self.title_image = load_image("images/Title.png", (self.panel_rect.width - 8,240))
+                
         # Sliders (speeds in m/s, base frequency in Hz)
         # Keep max speed safely below speed of sound (343 m/s)
+        first_slider_y = self.panel_rect.top + 12 + self.title_image.get_height() + 20 + 12        
         self.source_speed_slider = Slider(
             "Source Speed",
-            pygame.Rect(x, self.panel_rect.y + 85, w, 8),
+            pygame.Rect(x, first_slider_y, w, 8),
             0.0,
             280.0,
             50.0,
@@ -137,7 +145,7 @@ class Interface:
         )
         self.observer_speed_slider = Slider(
             "Observer Speed",
-            pygame.Rect(x, self.panel_rect.y + 145, w, 8),
+            pygame.Rect(x, first_slider_y+60, w, 8),
             0.0,
             280.0,
             0.0,
@@ -146,7 +154,7 @@ class Interface:
         )
         self.base_freq_slider = Slider(
             "Base Freq (f0)",
-            pygame.Rect(x, self.panel_rect.y + 205, w, 8),
+            pygame.Rect(x, first_slider_y+120, w, 8),
             100.0,
             1200.0,
             base_freq,
@@ -213,11 +221,11 @@ class Interface:
         )
 
         # Main interface title
-        title_surf = self.title_font.render(
-            "2D doppler visualization", True, self.palette["title_text"]
+        title_rect = self.title_image.get_rect(
+            midtop=(self.panel_rect.centerx, self.panel_rect.top + 12)
         )
-        screen.blit(title_surf, (self.panel_rect.x + 16, self.panel_rect.y + 18))
-
+        screen.blit(self.title_image, title_rect)
+        
         # Sliders
         for slider in self.sliders:
             slider.draw(screen, self.font)
@@ -234,17 +242,27 @@ class Interface:
         screen.blit(freq_surf, freq_surf.get_rect(center=self.freq_box.center))
 
         # Start/Pause button at bottom
+        
+        button_image=self.pause_image if self.running else self.start_image
+        screen.blit(button_image,button_image.get_rect(center=self.start_pause_rect.center),)
+        screen.blit(self.reset_image,self.reset_image.get_rect(center=self.reset_rect.center),)
+        '''
         sp_color = (
-            self.palette["pause_btn"] if self.running else self.palette["start_btn"]
-        )
+                    self.palette["pause_btn"] if self.running else self.palette["start_btn"]
+                )
         pygame.draw.rect(screen, sp_color, self.start_pause_rect, border_radius=6)
         sp_label = "Pause" if self.running else "Start"
         sp_text = self.font.render(sp_label, True, self.palette["btn_text"])
         screen.blit(sp_text, sp_text.get_rect(center=self.start_pause_rect.center))
-
+        '''
         # Reset button at bottom
+        button_image=self.reset_image
+        screen.blit(button_image,button_image.get_rect(center=self.reset_rect.center),)
+        screen.blit(self.reset_image,self.reset_image.get_rect(center=self.reset_rect.center),)
+        '''
         pygame.draw.rect(
             screen, self.palette["reset_btn"], self.reset_rect, border_radius=6
         )
         rst_text = self.font.render("Reset", True, self.palette["btn_text"])
         screen.blit(rst_text, rst_text.get_rect(center=self.reset_rect.center))
+        '''
