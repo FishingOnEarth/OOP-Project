@@ -6,10 +6,10 @@ def draw_rectangle(screen):
     pygame.draw.rect(screen, config.SOURCE_COLOR, (100, 100, 50, 50))
 
 
-def draw_scene(screen,path_start,path_end,source_position,source_velocity,observer_position,observer_velocity,wavefronts,simulation_time,sound_speed):
+def draw_scene(screen,path_start,path_end,source_position,source_velocity,observer_position,observer_velocity,wavefronts,simulation_time,sound_speed,pending_start=None,route_selected=None):
     '''Draws one frame by calling the other drawing functions in order'''
     draw_background(screen)
-    draw_road(screen,path_start,path_end)
+    draw_road(screen,path_start,source_position)
     #drawing for source car and arrow
     draw_car(screen,source_position,config.SOURCE_COLOR)
     draw_velocity_arrow(screen, source_position,source_velocity,config.SOURCE_COLOR)
@@ -22,6 +22,14 @@ def draw_scene(screen,path_start,path_end,source_position,source_velocity,observ
         radius=wave.radius(simulation_time,sound_speed)
         draw_wavefront(screen,center,radius)
 
+    if pending_start is not None:
+        pygame.draw.circle(screen,config.MARKER_COLOR,to_pixels(pending_start),3)
+    elif route_selected:
+        pygame.draw.circle(screen,config.MARKER_COLOR,to_pixels(path_start),3)
+        pygame.draw.circle(screen,config.MARKER_COLOR,to_pixels(path_end),3)
+
+
+
 
 
 def draw_background(screen):
@@ -30,10 +38,20 @@ def draw_background(screen):
     
 
 def draw_road(screen,start,end):
-    '''Draws the road between the start and end points'''
+    '''Draws the road represented by a trail of dots between the start and end points'''
     start=to_pixels(start)
     end=to_pixels(end)
-    pygame.draw.line(screen,config.LINE_COLOR,start,end,config.LINE_WIDTH)
+    xi,yi=start
+    xf,yf=end
+    dx=xf-xi
+    dy=yf-yi
+    length=(dx**2 + dy**2)**0.5
+    if length==0:
+        return
+    ux,uy=dx/length,dy/length
+    for dot in range(1,int(length/20)):
+        dot_center=(xi+dot*20*ux,yi+dot*20*uy)
+        pygame.draw.circle(screen,config.MARKER_COLOR,dot_center,3)
 
 def draw_car(screen,position,color):
     '''draws one car at its current position using its assigned color'''
