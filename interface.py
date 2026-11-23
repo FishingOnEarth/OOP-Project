@@ -127,7 +127,7 @@ class Interface:
 
         #load images for buttons and title
         self.start_image = load_image("images/start.png", self.start_pause_rect.size)
-        self.pause_image = load_image("images/reset.png", self.start_pause_rect.size)
+        self.pause_image = load_image("images/pause.png", self.start_pause_rect.size)
         self.reset_image = load_image("images/reset.png", self.reset_rect.size)
         self.title_image = load_image("images/Title.png", (self.panel_rect.width - 8,240))
                 
