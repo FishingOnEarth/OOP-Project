@@ -30,11 +30,11 @@ observer = Car(observer_start, ui.observer_speed, observer_end)
 car_speed=100
 
 source_position=(20,40)
-wave1=Wavefront(source_position,0)
-wavefronts.append(wave1)
 
 
-
+#user select start and end point
+pending_start=None
+route_selected=False
 
 running=True
 while running:
@@ -42,16 +42,36 @@ while running:
         ui.handle_event(event)
         if event.type==pygame.QUIT:
             running=False
+
+        #detect a click to configure start point
+        if event.type==pygame.MOUSEBUTTONDOWN:
+            if event.button==1:
+                if not ui.running:
+                    x,y = event.pos
+                    if x<panel_rect.left: #check that the click is left of the panel
+                        last_click=(x/config.PIXELS_PER_METRE,y/config.PIXELS_PER_METRE)
+                        if pending_start==None:
+                            pending_start=last_click
+                        elif last_click != pending_start:
+                            path_start=pending_start
+                            path_end=last_click
+                            route_selected=True
+                            source_car=Car(path_start, ui.source_speed, path_end)
+                            pending_start=None
+
+
     dt=clock.tick(60)/1000
 
     if ui.consume_reset_request():
         ui.base_freq_slider.value=440.0
         ui.source_speed_slider.value = 50.0
         ui.observer_speed_slider.value = 0.0
-        source_car=Car(path_start, car_speed,path_end )
+
+        source_car=Car(path_start, ui.source_speed,path_end )
         observer=Car((150,60),100,(10,60))
         source_car.speed=ui.source_speed
         observer.speed=ui.observer_speed
+
         simulation_time=0
         last_emission_time=0
         wavefronts.clear()
@@ -78,7 +98,7 @@ while running:
     else:
         f_obs.stop()
     
-    renderer.draw_scene(screen,path_start,path_end,source_car.position,source_car.velocity(),observer.position,observer.velocity(),wavefronts=wavefronts,simulation_time=simulation_time,sound_speed=config.SOUND_SPEED)
+    renderer.draw_scene(screen,path_start,path_end,source_car.position,source_car.velocity(),observer.position,observer.velocity(),wavefronts=wavefronts,simulation_time=simulation_time,sound_speed=config.SOUND_SPEED,pending_start=pending_start,route_selected=route_selected)
     ui.draw(screen)
     pygame.display.flip()
     
