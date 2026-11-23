@@ -40,7 +40,7 @@ class AudioManager:
             self.is_running = True
         self.amp_sig.value = self.target_volume
 
-    def set_frequncy(self, freq: float):
+    def set_frequency(self, freq: float):
         safe_freq = self.clamp_freq(freq)
         self.freq_sig.value = safe_freq
 
