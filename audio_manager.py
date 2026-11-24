@@ -9,7 +9,7 @@ class AudioManager:
     #volume 0.1 smoother during rapid pitch (frequency) sweeps
     def __init__(self, base_freq: float = 440.0, volume: float = 0.1, glide_time: float = 0.02):
         self.base_freq = float(base_freq)
-        self.target_volume = max(0.0, min(1.0, float(volume)))
+        self.target_volume = max(0.0, min(1.0, float(volume))) #clamp volume between 0 and 1
         self.min_freq = 20.0
         self.max_freq = 18000.0 #range of frequency where human can hear, although this simulation will probably not reach this far
         #just in case for the math
@@ -53,7 +53,7 @@ class AudioManager:
         self.stop()
         self.freq_sig.value = self.base_freq
 
-    def cleanup(self):
+    def cleanup(self): #when simulation closes
         self.amp_sig.value = 0.0
         if self.is_running:
             self.server.stop()
