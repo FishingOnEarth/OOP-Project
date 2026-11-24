@@ -2,22 +2,22 @@ import pygame
 from assets import load_image
 
 #customize color
-BACKGROUND_COLOR = (24, 27, 36)
+BACKGROUND_COLOR = (0, 0, 170)
 
 COLOR_PALETTE = {
-    "panel_bg": (32, 35, 44),
+    "panel_bg": (0, 0, 130),
     "panel_border": (65, 70, 85),
     "title_text": (245, 245, 250),
     "label_text": (235, 235, 240),
-    "slider_track": (90, 95, 110),
-    "slider_fill": (70, 165, 250),
-    "slider_knob": (255, 255, 255),
+    "slider_track": (0,0,0),
+    "slider_fill": (255,165,0),
+    "slider_knob": (255, 255, 0),
     "start_btn": (45, 165, 95),
     "pause_btn": (210, 140, 45),
     "reset_btn": (75, 82, 100),
     "btn_text": (255, 255, 255),
-    "readout_bg": (22, 24, 31),
-    "readout_text": (110, 220, 175),
+    "readout_bg": (0, 0, 0),
+    "readout_text": (0, 255, 220),
 }
 
 
