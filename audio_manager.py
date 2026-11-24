@@ -26,7 +26,7 @@ class AudioManager:
         self.amp_sig = SigTo(value= 0.0, time = 0.015, init= 0.0)
 
         #continuous sine oscillator and route to output
-        self.tone = Sine(freq=self.freq_sig, mul= self.amp_sig).out()
+        self.tone = Sine(freq=self.freq_sig, mul= self.amp_sig).out() #generates sine wave, mul = amplitude multiplier, control volume
         self.is_running = False
 
     def clamp_freq(self, freq: float):
