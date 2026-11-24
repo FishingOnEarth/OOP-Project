@@ -235,7 +235,7 @@ class Interface:
             screen, self.palette["readout_bg"], self.freq_box, border_radius=6
         )
         freq_surf = self.title_font.render(
-            f"Observed: {self.current_freq:.1f} Hz",
+            f"Observed frequency: {self.current_freq:.1f} Hz",
             True,
             self.palette["readout_text"],
         )
