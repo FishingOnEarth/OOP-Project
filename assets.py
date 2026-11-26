@@ -4,6 +4,8 @@
 import pygame
 
 def load_image(path,size):
+    """Load an image and resize it to fit the requested bounds."""
+    # A single scale factor preserves the original aspect ratio.
     image=pygame.image.load(path).convert_alpha()
     width,height=image.get_size()
     max_width, max_height = size

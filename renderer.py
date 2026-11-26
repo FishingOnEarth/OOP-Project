@@ -6,6 +6,8 @@ import config
 from wavefront import Wavefront
 
 def draw_rectangle(screen):
+    """Draw a fixed rectangle in the source color."""
+    # The rectangle uses screen coordinates in pixels.
     pygame.draw.rect(screen, config.SOURCE_COLOR, (100, 100, 50, 50))
 
 
@@ -37,11 +39,13 @@ def draw_scene(screen,path_start,path_end,source_position,source_velocity,observ
 
 def draw_background(screen):
     '''Fills the screen with the backgournd color, clearing the previous frame'''
+    # Clear the previous frame before drawing the next scene.
     screen.fill(config.BACKGROUND_COLOR)
     
 
 def draw_road(screen,start,end):
     '''Draws the road represented by a trail of dots between the start and end points'''
+    # The trail uses pixel spacing so the dots stay evenly spaced on screen.
     start=to_pixels(start)
     end=to_pixels(end)
     xi,yi=start
@@ -58,6 +62,7 @@ def draw_road(screen,start,end):
 
 def draw_car(screen,position,image):
     '''draws one car at its current position using its assigned color'''
+    # The simulation position marks the center of the sprite.
     '''
     rect=pygame.Rect(0,0,config.CAR_WIDTH,config.CAR_HEIGHT)
     position=to_pixels(position)
@@ -70,6 +75,7 @@ def draw_car(screen,position,image):
 
 def draw_wavefront(screen,center,radius):
     '''draws one circle using its fixed center and current radius'''
+    # Convert the physical radius to pixels for Pygame.
     center=to_pixels(center)
     radius=round(radius*config.PIXELS_PER_METRE)
     pygame.draw.circle(screen,config.LINE_COLOR,center,radius,config.LINE_WIDTH)
@@ -100,6 +106,8 @@ def draw_velocity_arrow(screen, position,velocity,color):
     pygame.draw.polygon(screen, color, points)
 
 def to_pixels(position):
+    """Convert a position in metres to integer screen coordinates."""
+    # Both axes use the same pixels-per-metre scale.
     x, y = position
     return (
         round(x * config.PIXELS_PER_METRE),
