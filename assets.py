@@ -1,3 +1,6 @@
+# Team members: Xuanchen Yu, Yiwen Ma, Jiaqi Sun
+# Purpose: Loads and scales images for the simulation and its controls.
+
 import pygame
 
 def load_image(path,size):

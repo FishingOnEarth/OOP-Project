@@ -1,3 +1,6 @@
+# Team members: Xuanchen Yu, Yiwen Ma, Jiaqi Sun
+# Purpose: Generates the tone heard by the observer and controls its pitch and volume.
+
 #Audio control using pyo
 
 #raise error for frequency beyond range of human hearing

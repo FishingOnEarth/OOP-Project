@@ -1,3 +1,6 @@
+# Team members: Xuanchen Yu, Yiwen Ma, Jiaqi Sun
+# Purpose: Defines shared settings for the simulation, including display dimensions and sound speed.
+
 WINDOW_SIZE=(1050, 600)
 BACKGROUND_COLOR=(0,0,0)
 PIXELS_PER_METRE = 5

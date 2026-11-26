@@ -1,3 +1,6 @@
+# Team members: Xuanchen Yu, Yiwen Ma, Jiaqi Sun
+# Purpose: Draws the cars, trail, velocity arrows, and sound wavefronts.
+
 import pygame
 import config 
 from wavefront import Wavefront

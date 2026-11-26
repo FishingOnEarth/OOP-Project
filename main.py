@@ -1,3 +1,6 @@
+# Team members: Xuanchen Yu, Yiwen Ma, Jiaqi Sun
+# Purpose: Runs the simulation loop and coordinates input, motion, graphics, and audio.
+
 import pygame
 import config
 import renderer

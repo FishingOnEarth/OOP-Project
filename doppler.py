@@ -1,3 +1,6 @@
+# Team members: Xuanchen Yu, Yiwen Ma, Jiaqi Sun
+# Purpose: Calculates the frequency heard by the observer from the motion of both cars.
+
 class Doppler:
     def __init__(self, soundspeed = 343):
         self.soundspeed = soundspeed

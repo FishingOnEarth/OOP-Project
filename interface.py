@@ -1,3 +1,6 @@
+# Team members: Xuanchen Yu, Yiwen Ma, Jiaqi Sun
+# Purpose: Handles the sliders and buttons and displays the observed frequency.
+
 import pygame
 from assets import load_image
 

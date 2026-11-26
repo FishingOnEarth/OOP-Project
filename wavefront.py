@@ -1,3 +1,6 @@
+# Team members: Xuanchen Yu, Yiwen Ma, Jiaqi Sun
+# Purpose: Stores where and when a wave was emitted and calculates its expanding radius.
+
 class Wavefront:
     def __init__(self,source_position,emmited_at):
         '''Saves where and when the source emmitted the wavefront'''

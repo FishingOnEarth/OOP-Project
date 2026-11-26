@@ -1,3 +1,6 @@
+# Team members: Xuanchen Yu, Yiwen Ma, Jiaqi Sun
+# Purpose: Tracks each car along its path and calculates its velocity.
+
 import math
 
 class Car:
