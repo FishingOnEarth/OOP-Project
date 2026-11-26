@@ -5,12 +5,6 @@ import pygame
 import config 
 from wavefront import Wavefront
 
-def draw_rectangle(screen):
-    """Draw a fixed rectangle in the source color."""
-    # The rectangle uses screen coordinates in pixels.
-    pygame.draw.rect(screen, config.SOURCE_COLOR, (100, 100, 50, 50))
-
-
 def draw_scene(screen,path_start,path_end,source_position,source_velocity,observer_position,observer_velocity,wavefronts,simulation_time,sound_speed,source_image,observer_image,pending_start=None,route_selected=None):
     '''Draws one frame by calling the other drawing functions in order'''
     draw_background(screen)
