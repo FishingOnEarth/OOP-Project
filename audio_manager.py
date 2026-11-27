@@ -3,7 +3,6 @@
 
 #Audio control using pyo
 
-#raise error for frequency beyond range of human hearing
 import time
 from pyo import Server, Sine, SigTo
 import math
@@ -24,7 +23,8 @@ class AudioManager:
         '''smooth control for frequency using freq_sig to glide toward target frequency
         over glide_time instead of jumping straight to other frequency, which may create click and zippering sound'''
         self.freq_sig = SigTo(value= self.base_freq, time= glide_time, init= self.base_freq)
-        '''smooth control for volume and amplitude gliding over 15 ms'''
+        
+        #smooth control for volume and amplitude gliding over 15 ms
         self.amp_sig = SigTo(value= 0.0, time = 0.015, init= 0.0)
 
         #continuous sine oscillator and route to output
@@ -32,11 +32,13 @@ class AudioManager:
         self.is_running = False
 
     def clamp_freq(self, freq: float):
+        #limit the frequency to be within audible range 20-18000 Hz
         if freq is None or not math.isfinite(freq) or freq <= 0:
             return self.freq_sig.value
         return max(self.min_freq, min(self.max_freq, float(freq)))
 
     def start(self):
+        #turn on volume, update status is running
         if not self.is_running:
             self.server.start()
             self.is_running = True
@@ -58,10 +60,10 @@ class AudioManager:
         self.freq_sig.value = self.base_freq #resets
 
     def cleanup(self): #when simulation closes
-        '''shuts down the server only when exit the simulation'''
+        #shuts down the server only when exit the simulation
         self.amp_sig.value = 0.0
         if self.is_running:
             self.server.stop()
             self.is_running = False
         self.server.shutdown() 
-        '''no need to boot and shutdown every single time'''
+        #no need to boot and shutdown every single time
