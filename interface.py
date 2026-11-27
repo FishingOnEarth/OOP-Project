@@ -25,6 +25,8 @@ COLOR_PALETTE = {
 
 
 class Slider:
+    """Draggable horizontal slider for adjusting a numeric parameter."""
+
     def __init__(
         self,
         label,
@@ -35,6 +37,7 @@ class Slider:
         unit="",
         palette=None,
     ):
+        """Set up the slider range, starting value, unit, and colors."""
         self.label = label
         self.rect = rect
         self.min_val = float(min_val)
@@ -45,13 +48,15 @@ class Slider:
         self.palette = palette if palette is not None else COLOR_PALETTE
 
     def _set_from_x(self, x):
+        """Update the slider value based on a horizontal mouse position ratio with slider rectangle."""
         if self.rect.width <= 0:
             return
-        ratio = (x - self.rect.x) / self.rect.width
+        ratio = (x - self.rect.x) / self.rect.width #ratio 
         ratio = max(0.0, min(1.0, ratio))
-        self.value = self.min_val + ratio * (self.max_val - self.min_val)
+        self.value = self.min_val + ratio * (self.max_val - self.min_val) #linear interpolation method
 
     def handle_event(self, event):
+        """Handle mouse clicks and drags on the slider and return if value changed."""
         changed = False
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             hit_box = self.rect.inflate(0, 12)
@@ -69,6 +74,7 @@ class Slider:
         return changed
 
     def draw(self, screen, font):
+        """Draw the slider label, value, track, filled bar, and knob."""
         # Label + current numeric value
         text_surf = font.render(
             f"{self.label}: {self.value:.1f} {self.unit}".strip(),
@@ -98,6 +104,8 @@ class Slider:
 
 
 class Interface:
+    """Control panel managing sliders, buttons, and the observed frequency readout."""
+
     def __init__(
         self,
         panel_rect,
@@ -105,6 +113,7 @@ class Interface:
         bg_color=BACKGROUND_COLOR,
         palette=None,
     ):
+        """Build the control panel layout, buttons, sliders, and readout box."""
         self.panel_rect = panel_rect
         self.bg_color = bg_color
         self.palette = palette if palette is not None else COLOR_PALETTE
@@ -175,29 +184,36 @@ class Interface:
 
     @property
     def source_speed(self):
+        """Return the current source speed value from its slider."""
         return self.source_speed_slider.value
 
     @property
     def observer_speed(self):
+        """Return the current observer speed value from its slider."""
         return self.observer_speed_slider.value
 
     @property
     def base_freq(self):
+        """Return the current base frequency value from its slider."""
         return self.base_freq_slider.value
 
     def set_running(self, running):
+        """Set whether the simulation is running or paused."""
         self.running = bool(running)
 
     def set_observed_frequency(self, freq):
+        """Update the observed frequency shown in the readout box."""
         self.current_freq = float(freq)
 
     def consume_reset_request(self):
+        """Return True once if a reset was requested, then clear the flag."""
         if self.reset_requested:
             self.reset_requested = False
             return True
         return False
 
     def handle_event(self, event):
+        """Process window quit, button clicks, and slider input events."""
         if event.type == pygame.QUIT:
             self.should_quit = True
             return
@@ -213,6 +229,7 @@ class Interface:
             slider.handle_event(event)
 
     def draw(self, screen):
+        """Draw the panel background, title image, sliders, readout, and buttons."""
         # Panel background and left border
         pygame.draw.rect(screen, self.palette["panel_bg"], self.panel_rect)
         pygame.draw.line(
@@ -249,23 +266,8 @@ class Interface:
         button_image=self.pause_image if self.running else self.start_image
         screen.blit(button_image,button_image.get_rect(center=self.start_pause_rect.center),)
         screen.blit(self.reset_image,self.reset_image.get_rect(center=self.reset_rect.center),)
-        '''
-        sp_color = (
-                    self.palette["pause_btn"] if self.running else self.palette["start_btn"]
-                )
-        pygame.draw.rect(screen, sp_color, self.start_pause_rect, border_radius=6)
-        sp_label = "Pause" if self.running else "Start"
-        sp_text = self.font.render(sp_label, True, self.palette["btn_text"])
-        screen.blit(sp_text, sp_text.get_rect(center=self.start_pause_rect.center))
-        '''
+        
         # Reset button at bottom
         button_image=self.reset_image
         screen.blit(button_image,button_image.get_rect(center=self.reset_rect.center),)
         screen.blit(self.reset_image,self.reset_image.get_rect(center=self.reset_rect.center),)
-        '''
-        pygame.draw.rect(
-            screen, self.palette["reset_btn"], self.reset_rect, border_radius=6
-        )
-        rst_text = self.font.render("Reset", True, self.palette["btn_text"])
-        screen.blit(rst_text, rst_text.get_rect(center=self.reset_rect.center))
-        '''
