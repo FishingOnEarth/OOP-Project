@@ -92,7 +92,10 @@ while running:
 
         source_car.update(dt*0.2)
         observer.update(dt*0.2)
-        fo=doppler.dopplermath(source_car, observer, ui.base_freq)
+        if source_car.position == observer.position:
+            fo = ui.current_freq
+        else:
+            fo = doppler.dopplermath(source_car, observer, ui.base_freq)
         ui.set_observed_frequency(fo)
 
         f_obs.set_frequency(fo)
