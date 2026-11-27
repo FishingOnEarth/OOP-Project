@@ -28,7 +28,6 @@ class Doppler:
         return fo
 
 from car import Car
-from doppler import Doppler
 
 source = Car((0, 0), 20, (100, 0))
 observer = Car((200, 0), 10)

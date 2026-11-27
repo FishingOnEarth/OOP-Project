@@ -106,8 +106,6 @@ while running:
         f_obs.stop()
     
     renderer.draw_scene(screen,path_start,path_end,source_car.position,source_car.velocity(),observer.position,observer.velocity(),wavefronts=wavefronts,simulation_time=simulation_time,sound_speed=config.SOUND_SPEED,source_image=source_image,observer_image=observer_image,pending_start=pending_start,route_selected=route_selected)
-    source_image=source_image
-    observer_image=observer_image
     ui.draw(screen)
     pygame.display.flip()
     
